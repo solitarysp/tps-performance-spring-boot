@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @Slf4j
@@ -22,9 +23,9 @@ public class TpsCountService {
     @Autowired(required = false)
     TpsCountConfigProperties tpsCountConfigProperties;
     @Getter
-    Map<String, TpsCounter> singleton = new HashMap<>();
+    Map<String, TpsCounter> singleton = new ConcurrentHashMap<>();
     @Getter
-    Map<String, GroupTpsCounter> multiple = new HashMap<>();
+    Map<String, GroupTpsCounter> multiple = new ConcurrentHashMap<>();
 
     @Async("threadPoolAddTpsCount")
     public void addTps(TpsCountTraceAspect tpsCountTraceAspect) {
