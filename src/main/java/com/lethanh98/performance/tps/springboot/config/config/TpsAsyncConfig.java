@@ -1,6 +1,6 @@
 package com.lethanh98.performance.tps.springboot.config.config;
 
-import com.lethanh98.performance.tps.springboot.config.config.properties.TpsConfigProperties;
+import com.lethanh98.performance.tps.springboot.config.config.properties.TpsCountConfigProperties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +16,16 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Getter
 public class TpsAsyncConfig {
     @Autowired(required = false)
-    TpsConfigProperties tpsConfigProperties;
+    TpsCountConfigProperties tpsCountConfigProperties;
 
-    @Bean("threadPoolAddTps")
+    @Bean("threadPoolAddTpsCount")
     public TaskExecutor threadPoolAddTps() {
-        log.info(tpsConfigProperties.getAddTpsThread().getThreadNamePrefix() + ": corePoolSize : " + tpsConfigProperties.getAddTpsThread().getCorePoolSize() + ", MaxPoolSize : " + tpsConfigProperties.getAddTpsThread().getMaxPoolSize());
+        log.info(tpsCountConfigProperties.getAddTpsThread().getThreadNamePrefix() + ": corePoolSize : " + tpsCountConfigProperties.getAddTpsThread().getCorePoolSize() + ", MaxPoolSize : " + tpsCountConfigProperties.getAddTpsThread().getMaxPoolSize());
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(tpsConfigProperties.getAddTpsThread().getCorePoolSize());
-        executor.setMaxPoolSize(tpsConfigProperties.getAddTpsThread().getMaxPoolSize());
+        executor.setCorePoolSize(tpsCountConfigProperties.getAddTpsThread().getCorePoolSize());
+        executor.setMaxPoolSize(tpsCountConfigProperties.getAddTpsThread().getMaxPoolSize());
         executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setThreadNamePrefix(tpsConfigProperties.getAddTpsThread().getThreadNamePrefix());
+        executor.setThreadNamePrefix(tpsCountConfigProperties.getAddTpsThread().getThreadNamePrefix());
         return executor;
     }
 }

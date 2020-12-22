@@ -7,8 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TpsTraceAspect {
+public @interface TpsCountTraceAspect {
     boolean enabled() default true;
     boolean isMultiple() default false;
+
     String name();
 }

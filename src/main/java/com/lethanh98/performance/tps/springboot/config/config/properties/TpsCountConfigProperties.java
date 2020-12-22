@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@ConfigurationProperties(prefix = "app.tps")
+@ConfigurationProperties(prefix = "app.tps.counter")
 @Configuration
 @Data
-public class TpsConfigProperties {
-    boolean enabled = false;
+public class TpsCountConfigProperties {
     ThreadTaskConfig addTpsThread = new ThreadTaskConfig();
     Map<String, TpsConfig> singletonConfig = new Hashtable<>();
     Map<String, MultipleTpsConfig> multipleConfig = new Hashtable<>();
@@ -25,8 +24,7 @@ public class TpsConfigProperties {
         private long duration = 10000;
         /**
          *
-         * %tps% = total / time = > tps/s
-         * %total% = total -> total in duration
+         * %tps% = total transaction
          */
         private String msg = "%tps%";
         private String name;
@@ -41,6 +39,6 @@ public class TpsConfigProperties {
     public static class ThreadTaskConfig {
         int corePoolSize = 10;
         int maxPoolSize = 15;
-        String threadNamePrefix = "tps";
+        String threadNamePrefix = "tps-count";
     }
 }

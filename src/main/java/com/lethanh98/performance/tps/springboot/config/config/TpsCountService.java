@@ -2,8 +2,8 @@ package com.lethanh98.performance.tps.springboot.config.config;
 
 import com.lethanh98.performance.tps.GroupTpsCounter;
 import com.lethanh98.performance.tps.TpsCounter;
-import com.lethanh98.performance.tps.springboot.config.aop.annotation.TpsTraceAspect;
-import com.lethanh98.performance.tps.springboot.config.config.properties.TpsConfigProperties;
+import com.lethanh98.performance.tps.springboot.config.aop.annotation.TpsCountTraceAspect;
+import com.lethanh98.performance.tps.springboot.config.config.properties.TpsCountConfigProperties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +18,30 @@ import java.util.Objects;
 
 @Configuration
 @Slf4j
-public class TpsService {
+public class TpsCountService {
     @Autowired(required = false)
-    TpsConfigProperties tpsConfigProperties;
+    TpsCountConfigProperties tpsCountConfigProperties;
     @Getter
     Map<String, TpsCounter> singleton = new HashMap<>();
     @Getter
     Map<String, GroupTpsCounter> multiple = new HashMap<>();
 
     @Async("threadPoolAddTpsCount")
-    public void addTps(TpsTraceAspect tpsTraceAspect) {
+    public void addTps(TpsCountTraceAspect tpsCountTraceAspect) {
         try {
-            if (!tpsTraceAspect.isMultiple()) {
-                TpsCounter tpsCounter = getSingleton().get(tpsTraceAspect.name());
+            if (!tpsCountTraceAspect.isMultiple()) {
+                TpsCounter tpsCounter = getSingleton().get(tpsCountTraceAspect.name());
                 if (Objects.nonNull(tpsCounter)) {
                     tpsCounter.addTps();
                 } else {
-                    log.warn("Tps not found {}", tpsTraceAspect.name());
+                    log.warn("Tps count not found {}", tpsCountTraceAspect.name());
                 }
             } else {
-                GroupTpsCounter groupTpsCounter = getMultiple().get(tpsTraceAspect.name());
+                GroupTpsCounter groupTpsCounter = getMultiple().get(tpsCountTraceAspect.name());
                 if(Objects.nonNull(groupTpsCounter)){
                     groupTpsCounter.addTps();
                 }else {
-                    log.warn("Tps not found group {}", tpsTraceAspect.name());
+                    log.warn("Tps count not found group {}", tpsCountTraceAspect.name());
                 }
             }
         } catch (Exception e) {
@@ -51,15 +51,13 @@ public class TpsService {
 
     @Autowired
     private void initSingleton() {
-        if (Objects.nonNull(tpsConfigProperties)) {
-            tpsConfigProperties.getSingletonConfig().entrySet().forEach(stringTpsConfigEntry -> {
+        if (Objects.nonNull(tpsCountConfigProperties)) {
+            tpsCountConfigProperties.getSingletonConfig().entrySet().forEach(stringTpsConfigEntry -> {
                 TpsCounter tpsCounter = new TpsCounter(
                         stringTpsConfigEntry.getKey(),
                         stringTpsConfigEntry.getValue().getDuration(),
                         stringTpsConfigEntry.getValue().getTimeUnit(), (s, l) -> {
-                    long seconds = stringTpsConfigEntry.getValue().getTimeUnit().toSeconds(stringTpsConfigEntry.getValue().getDuration());
-                    long tps = l / seconds;
-                    log.info(stringTpsConfigEntry.getValue().getMsg().replace("%tps%", String.valueOf(tps > 0 ? tps : 0)));
+                    log.info(stringTpsConfigEntry.getValue().getMsg().replace("%tps%", String.valueOf(l)));
                 });
                 singleton.put(tpsCounter.getName(), tpsCounter);
             });
@@ -68,8 +66,8 @@ public class TpsService {
 
     @Autowired
     private void initMultiple() {
-        if (Objects.nonNull(tpsConfigProperties)) {
-            tpsConfigProperties.getMultipleConfig().entrySet().forEach(multipleTpsConfigEntry -> {
+        if (Objects.nonNull(tpsCountConfigProperties)) {
+            tpsCountConfigProperties.getMultipleConfig().entrySet().forEach(multipleTpsConfigEntry -> {
                 List<TpsCounter> tpsCounters = new ArrayList<>();
 
                 multipleTpsConfigEntry.getValue().getTpsConfigs().forEach(stringTpsConfigEntry -> {
@@ -77,9 +75,7 @@ public class TpsService {
                             stringTpsConfigEntry.getName(),
                             stringTpsConfigEntry.getDuration(),
                             stringTpsConfigEntry.getTimeUnit(), (s, l) -> {
-                        long seconds = stringTpsConfigEntry.getTimeUnit().toSeconds(stringTpsConfigEntry.getDuration());
-                        long tps = l / seconds;
-                        log.info(stringTpsConfigEntry.getMsg().replace("%tps%", String.valueOf(tps > 0 ? tps : 0)).replace("%total%", String.valueOf(l)));
+                        log.info(stringTpsConfigEntry.getMsg().replace("%tps%", String.valueOf(l)));
                     });
                     tpsCounters.add(tpsCounter);
                 });
