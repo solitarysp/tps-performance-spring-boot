@@ -60,7 +60,7 @@ public class TpsService {
                         stringTpsConfigEntry.getValue().getTimeUnit(), (s, l) -> {
                     long seconds = stringTpsConfigEntry.getValue().getTimeUnit().toSeconds(stringTpsConfigEntry.getValue().getDuration());
                     long tps = l / seconds;
-                    log.info(stringTpsConfigEntry.getValue().getMsg().replace("%tps%", String.valueOf(tps > 0 ? tps : 0)));
+                    log.info(stringTpsConfigEntry.getValue().getMsg().replace("%tps%", String.valueOf(tps > 0 ? tps : 0)).replace("%total%", String.valueOf(l)));
                 });
                 singleton.put(tpsCounter.getName(), tpsCounter);
             });
