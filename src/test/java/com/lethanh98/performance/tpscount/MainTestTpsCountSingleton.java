@@ -1,5 +1,7 @@
-package com.lethanh98.performance;
+package com.lethanh98.performance.tpscount;
 
+import com.lethanh98.performance.Main;
+import com.lethanh98.performance.tps.TestTpsSingletonService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = Main.class)
 @TestPropertySource(properties = {"application.properties"})
-public class MainTestTpsSingleton {
+public class MainTestTpsCountSingleton {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    TestTpsSingletonService singletonService;
+    TestTpsCountMultipleService singletonService;
     @Test
-    public void testTpsSingleton() throws InterruptedException {
+    public void testTpsCountSingleton() throws InterruptedException {
         for (int i = 0; i < 5000; i++) {
             singletonService.test();
         }

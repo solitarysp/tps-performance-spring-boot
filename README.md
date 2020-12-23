@@ -5,6 +5,8 @@
 - `msg` is msg show log
 - `duration` is duration tracking
 - `time-unit` type time tracking
+# TPS
+- Is module tracking and show log tps/s with time config
 ## TPS singleton
 - Use to create a tps tracking. Config in `application.properties`
 ```
@@ -90,4 +92,46 @@ count router ++ 5000
 
 [Timer-0] INFO com.lethanh98.performance.tps.springboot.config.config.TpsService - Tps router in 5s  is 1000 with total 5000
 [Timer-1] INFO com.lethanh98.performance.tps.springboot.config.config.TpsService - Tps router in 10s  is 500 with total 5000
+```
+# TPS count
+- Is module tracking and show log count access to
+
+## TPS count singleton
+- Use to create a tps count. Config in `application.properties`
+```
+app.tps.counter.singleton-config.countsingleton.msg= Tps count countsingleton in 5s is %tps%
+app.tps.counter.singleton-config.countsingleton.duration=5
+app.tps.counter.singleton-config.countsingleton.time-unit=seconds
+```
+- `countsingleton` is name singleton
+- msg for log.
+  - %tps% is log data binding to tps
+## Class using with annotation
+
+```
+@Service
+@Slf4j
+public class TestTpsSingletonService {
+    @TpsCountTraceAspect(name = "countsingleton")
+    public void test() {
+        log.info("router ++");
+    }
+}
+```
+- Using `@TpsCountTraceAspect` with ``name`` mapping with config
+## Test
+```
+    @Test
+    public void testTpsCountSingleton() throws InterruptedException {
+        for (int i = 0; i < 5000; i++) {
+            singletonService.test();
+        }
+        Thread.sleep(11000);
+    }
+```
+
+## Result
+```
+count router ++ 5000
+[Timer-2] INFO com.lethanh98.performance.tps.springboot.config.config.TpsCountService - Tps count countsingleton in 5s is 5000
 ```

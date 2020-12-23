@@ -1,5 +1,6 @@
-package com.lethanh98.performance;
+package com.lethanh98.performance.tps;
 
+import com.lethanh98.performance.Main;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

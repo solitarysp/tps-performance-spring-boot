@@ -1,4 +1,4 @@
-package com.lethanh98.performance;
+package com.lethanh98.performance.tps;
 
 import com.lethanh98.performance.tps.springboot.config.aop.annotation.TpsTraceAspect;
 import lombok.extern.slf4j.Slf4j;
