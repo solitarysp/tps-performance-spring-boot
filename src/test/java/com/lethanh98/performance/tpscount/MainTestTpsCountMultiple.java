@@ -12,13 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = Main.class)
 @TestPropertySource(properties = {"application.properties"})
-public class MainTestTpsCountSingleton {
+public class MainTestTpsCountMultiple {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    TestTpsCountSingletonService singletonService;
+    TestTpsCountMultipleService singletonService;
     @Test
-    public void testTpsCountSingleton() throws InterruptedException {
+    public void testTpsCountMultiple() throws InterruptedException {
         for (int i = 0; i < 5000; i++) {
             singletonService.test();
         }
