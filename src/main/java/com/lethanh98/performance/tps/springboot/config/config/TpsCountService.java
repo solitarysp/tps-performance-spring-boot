@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @Slf4j
 public class TpsCountService {
-    @Autowired(required = false)
+    @Autowired
     TpsCountConfigProperties tpsCountConfigProperties;
     @Getter
     Map<String, TpsCounter> singleton = new ConcurrentHashMap<>();
@@ -39,9 +38,9 @@ public class TpsCountService {
                 }
             } else {
                 GroupTpsCounter groupTpsCounter = getMultiple().get(tpsCountTraceAspect.name());
-                if(Objects.nonNull(groupTpsCounter)){
+                if (Objects.nonNull(groupTpsCounter)) {
                     groupTpsCounter.addTps();
-                }else {
+                } else {
                     log.warn("Tps count not found group {}", tpsCountTraceAspect.name());
                 }
             }

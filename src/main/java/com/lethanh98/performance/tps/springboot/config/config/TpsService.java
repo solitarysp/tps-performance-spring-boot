@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @Slf4j
 public class TpsService {
-    @Autowired(required = false)
+    @Autowired
     TpsConfigProperties tpsConfigProperties;
     @Getter
     Map<String, TpsCounter> singleton = new ConcurrentHashMap<>();

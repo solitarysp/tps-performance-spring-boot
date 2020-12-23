@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class TpsCountTraceAOPImpl {
-    @Autowired(required = false)
+    @Autowired
     TpsCountService tpsCountService;
 
     @SuppressWarnings("java:S1186")

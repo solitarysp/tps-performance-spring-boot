@@ -15,7 +15,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Slf4j
 @Getter
 public class TpsAsyncConfig {
-    @Autowired(required = false)
+    @Autowired
     TpsCountConfigProperties tpsCountConfigProperties;
 
     @Bean("threadPoolAddTpsCount")
