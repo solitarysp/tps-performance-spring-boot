@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
@@ -57,10 +56,17 @@ public class TpsTimeCountService {
                 TpsTimeCounter tpsCounter = new TpsTimeCounter(
                         stringTpsConfigEntry.getKey(),
                         stringTpsConfigEntry.getValue().getDuration(),
-                        stringTpsConfigEntry.getValue().getTimeUnit(), (s, l) -> {
+                        stringTpsConfigEntry.getValue().getTimeUnit(), (s, cTime, count) -> {
+                    TpsTimeCountConfigProperties.TpsConfig tpsConfig = stringTpsConfigEntry.getValue();
 
-                    String result = stringTpsConfigEntry.getValue().getMsg().replace("%tps%", String.valueOf(stringTpsConfigEntry.getValue().getTypeTimeTps().convert(l, TimeUnit.NANOSECONDS)));
-                    result = result.replace("%type-time%", stringTpsConfigEntry.getValue().getTypeTimeTps().name());
+                    double tps = 0f;
+                    if (cTime > 0 && count > 0) {
+                        tps = cTime / (double) count / 1000000000;
+                    }
+                    String result = tpsConfig.getMsg().replace("%tps%",
+                            String.valueOf(tps));
+                    result = result.replace("%total-time%", String.valueOf(cTime));
+                    result = result.replace("%total%", String.valueOf(count));
                     log.info(result);
                 });
                 singleton.put(tpsCounter.getName(), tpsCounter);
@@ -78,15 +84,17 @@ public class TpsTimeCountService {
                     TpsTimeCounter tpsCounter = new TpsTimeCounter(
                             stringTpsConfigEntry.getName(),
                             stringTpsConfigEntry.getDuration(),
-                            stringTpsConfigEntry.getTimeUnit(), (s, l) -> {
+                            stringTpsConfigEntry.getTimeUnit(), (s, cTime, count) -> {
 
+                        double tps = 0f;
+                        if (cTime > 0 && count > 0) {
+                            tps = cTime / (double) count / 1000000000;
+                        }
                         String result = stringTpsConfigEntry.getMsg().replace("%tps%",
-                                String.valueOf(stringTpsConfigEntry.getTypeTimeTps().convert(l, TimeUnit.NANOSECONDS)));
-
-                        result = result.replace("%type-time%", stringTpsConfigEntry.getTypeTimeTps().name());
+                                String.valueOf(tps));
+                        result = result.replace("%total-time%", String.valueOf(cTime));
+                        result = result.replace("%total%", String.valueOf(count));
                         log.info(result);
-                        log.info(stringTpsConfigEntry.getMsg().replace("%tps%",
-                                String.valueOf(stringTpsConfigEntry.getTypeTimeTps().convert(l, TimeUnit.NANOSECONDS))));
                     });
                     tpsTimeCounters.add(tpsCounter);
                 });

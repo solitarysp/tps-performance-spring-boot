@@ -21,10 +21,8 @@ public class TpsTimeCountConfigProperties {
     @Data
     public static class TpsConfig {
         TimeUnit timeUnit = TimeUnit.MILLISECONDS;
-        TimeUnit typeTimeTps = TimeUnit.MILLISECONDS;
         private long duration = 10000;
         /**
-         *
          * %tps% = total transaction
          */
         private String msg = "%tps%";

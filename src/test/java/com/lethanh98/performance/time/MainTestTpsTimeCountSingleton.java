@@ -11,23 +11,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"application.properties"})
-public class MainTestTpsTimeCountMultiple {
+public class MainTestTpsTimeCountSingleton {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    TestTpsTimeCountMultiple testTpsMultipleService;
-
+    TestTpsTimeCountSingleton testTpsMultipleService;
     @Test
     public void testTpsMultiple() throws InterruptedException {
-        new Thread(() -> {
-            while (true) {
-                try {
-                    testTpsMultipleService.test();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        Thread.sleep(10000);
+        for (int i = 0; i < 5000; i++) {
+            testTpsMultipleService.test();
+        }
     }
 }

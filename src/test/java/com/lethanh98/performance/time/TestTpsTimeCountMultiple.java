@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class TestTpsTimeCountMultipleService {
-    @TpsTimeCountTraceAspect(name = "countsingleton", isMultiple = false)
+public class TestTpsTimeCountMultiple {
+    @TpsTimeCountTraceAspect(name = "countMultiple", isMultiple = true)
     public void test() throws InterruptedException {
-        Thread.sleep(2000);
-        log.info("router ++");
     }
 }

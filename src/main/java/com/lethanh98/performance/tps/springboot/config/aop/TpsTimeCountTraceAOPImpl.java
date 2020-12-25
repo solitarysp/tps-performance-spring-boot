@@ -25,12 +25,12 @@ public class TpsTimeCountTraceAOPImpl {
 
     @Around("pointcutAnnotation(tpsTimeCountTraceAspect)")
     public Object aroundProcessAnnotation(ProceedingJoinPoint joinPoint, TpsTimeCountTraceAspect tpsTimeCountTraceAspect) throws Throwable {
-        long start = System.nanoTime();
+        long start = System.currentTimeMillis();
         Object result = null;
         try {
             result = joinPoint.proceed();
         } finally {
-            tpsTimeCountService.addTps(tpsTimeCountTraceAspect, System.nanoTime() - start);
+            tpsTimeCountService.addTps(tpsTimeCountTraceAspect, System.currentTimeMillis() - start);
         }
         return result;
     }
